@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
 import jsonld from 'jsonld/dist/jsonld.min';
 import config from '../config';
-// eslint-disable-next-line import/first
 import axios from 'axios';
 
 window.jsonld = jsonld;
@@ -75,7 +73,7 @@ const mutations = {
       const ctx = response.data['@context'];
       // const ctx = _.filter(response.data['@context'], c => c.includes('contexts/generic'));
       axios.get(ctx).then((resp) => {
-        // console.log(68, resp.data);
+        console.log(68, resp.data);
         // state.termUrl = resp.data['@context'].reproterms;
         state.termUrl = 'http://schema.repronim.org/'; // change this
       });
