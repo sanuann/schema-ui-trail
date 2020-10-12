@@ -1,0 +1,60 @@
+<template>
+  <div class="DateInput">
+    <datepicker placeholder="Select Date" v-model="input" lang=selected_language
+                :disabledDates="dateParam.disabledDates" :format="customFormatter"
+                :minimumView=inputType :maximumView="'year'" :initialView=inputType
+                ></datepicker>
+  </div>
+</template>
+
+<script>
+import Datepicker from 'vuejs-datepicker';
+import moment from 'moment';
+
+export default {
+  name: 'DateInput',
+  props: ['constraints', 'init', 'inputType', 'selected_language'],
+  components: {
+    Datepicker,
+  },
+  watch: {
+    input() {
+      // if there is a change, emit it.
+      this.$emit('valueChanged', this.input);
+
+      // make sure you validate the date based on this.constraints.
+    },
+  },
+  methods: {
+    sendData(val) {
+      this.$emit('valueChanged', val.getFullYear());
+    },
+    customFormatter(date) {
+      if (this.inputType === 'year') {
+        return moment(date).format('YYYY');
+      } else if (this.inputType === 'date') {
+        return moment(date).format('MMM DD YYYY');
+      } return date;
+    },
+  },
+  data() {
+    return {
+      // a proxy. It should initialize to this.init. when its changed,
+      // we should tell the parent that its changed, with then changes this.input
+      input: null,
+      dateParam: {
+        disabledDates: {
+          from: new Date(), // Disable all dates after today
+        },
+      },
+    };
+  },
+  mounted() {
+    if (this.init) {
+      if (this.inputType === 'year') {
+        this.input = new Date(this.init, 0, 365);
+      } else this.input = this.init;
+    }
+  },
+};
+</script>
